@@ -3,10 +3,17 @@
 # TODO: import some modules and/or packages here
 
 import csv
+import os
 
+csv_filename = input("Please input a file name of the format sales-YYYYMM.csv:")
 
+#if os.path.isfile(os.path.dirname(__file__), "data", csv_filename) == True:
 
-# TODO: write some Python code here to produce the desired functionality...
+csv_filepath = os.path.join(os.path.dirname(__file__), "data", csv_filename)
+
+#else:
+ #   print("No file at this location")
+  #  breakpoint()
 
 print("-----------------------")
 print("MONTH: March 2018")
