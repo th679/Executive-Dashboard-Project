@@ -7,6 +7,7 @@ import os
 import itertools
 from operator import itemgetter
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 
 
 csv_filename = input("Please input a file name of the format sales-YYYYMM.csv:")
@@ -71,9 +72,12 @@ for product in top_products:
     name_axis.append(product["name"])
     sales_axis.append(float(product["sales"]))
 
+fig, ax = plt.subplots()
 
-plt.bar(name_axis, sales_axis)
-plt.ylabel('Sales')
-plt.xlabel('Product')
+ax.get_xaxis().set_major_formatter(plt.FuncFormatter(lambda x, loc: "${0:,.2f}".format(int(x))))
+
+plt.barh(name_axis, sales_axis)
+plt.ylabel('Product')
+plt.xlabel('Sales')
 plt.show()
 #adapted from dataviz-matplotlib slack channel
