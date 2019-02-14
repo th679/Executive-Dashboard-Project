@@ -18,6 +18,8 @@ csv_filepath = os.path.join(os.path.dirname(__file__), "data", csv_filename)
 #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/d42b75d4f536ebeca5d6b1934926cdd95aeea714/notes/python/modules/os.md
 
 exists = os.path.exists(csv_filepath)
+#adapted from https://dbader.org/blog/python-check-if-file-exists
+
 
 if exists == False:
     print("File does not exist")
@@ -57,9 +59,15 @@ top_products = sorted_product_sales[0:3]
     #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution_further.py
 
 
-print("-----------------------")
-print("MONTH: March 2018")
+def period(month):
+	months={'01':'January','02':'February','03':'March','04':'April',
+	'05':'May','06':'June','07':'July','08':'August','09':'September','10':'October',
+	'11':'November', '12':'December'}
+	return months[month]
+#adapted from https://github.com/hiepnguyen034/data_dashboard/blob/master/exec_dash.py
 
+print("-----------------------")
+print("MONTH: "+ period(csv_filename[10:12])+' '+ str(csv_filename[6:10]))
 print("-----------------------")
 print("CRUNCHING THE DATA...")
 
@@ -90,5 +98,6 @@ plt.barh(name_axis, sales_axis)
 plt.ylabel('Product')
 plt.xlabel('Sales')
 plt.title('Top Selling Products')
+plt.tight_layout()
 plt.show()
 #adapted from dataviz-matplotlib slack channel
