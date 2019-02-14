@@ -1,7 +1,5 @@
 # monthly_sales.py
 
-# TODO: import some modules and/or packages here
-
 import csv
 import os
 import itertools
@@ -13,18 +11,15 @@ import datetime
 
 csv_filename = input("Please input a file name of the format sales-YYYYMM.csv:")
 
-
 csv_filepath = os.path.join(os.path.dirname(__file__), "data", csv_filename)   
 #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/d42b75d4f536ebeca5d6b1934926cdd95aeea714/notes/python/modules/os.md
 
 exists = os.path.exists(csv_filepath)
 #adapted from https://dbader.org/blog/python-check-if-file-exists
 
-
 if exists == False:
     print("File does not exist")
     quit()
-
 
 
 rows = []
@@ -35,6 +30,7 @@ with open(csv_filepath, "r") as csv_file:
         rows.append(dict(od))
         # adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution.py
 
+
 sales_prices = []
 
 for row in rows:
@@ -42,6 +38,7 @@ for row in rows:
 
 total_sales = sum(sales_prices)
 usd = "${0:,.2f}"
+
 
 product_sales = []
 
@@ -66,8 +63,11 @@ def period(month):
 	return months[month]
 #adapted from https://github.com/hiepnguyen034/data_dashboard/blob/master/exec_dash.py
 
+month_year = period(csv_filename[10:12])+' '+ str(csv_filename[6:10])
+
+
 print("-----------------------")
-print("MONTH: "+ period(csv_filename[10:12])+' '+ str(csv_filename[6:10]))
+print("MONTH: "+ month_year)
 print("-----------------------")
 print("CRUNCHING THE DATA...")
 
@@ -81,6 +81,7 @@ for product in top_products:
 
 print("-----------------------")
 print("VISUALIZING THE DATA...")
+
 
 name_axis = []
 sales_axis = []
@@ -97,7 +98,7 @@ ax.get_xaxis().set_major_formatter(plt.FuncFormatter(lambda x, loc: "${0:,.2f}".
 plt.barh(name_axis, sales_axis)
 plt.ylabel('Product')
 plt.xlabel('Sales')
-plt.title('Top Selling Products')
+plt.title('Top Selling Products: ' + month_year)
 plt.tight_layout()
 plt.show()
 #adapted from dataviz-matplotlib slack channel
