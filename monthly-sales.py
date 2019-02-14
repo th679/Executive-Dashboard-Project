@@ -8,13 +8,24 @@ import itertools
 from operator import itemgetter
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
+import datetime
 
 
 csv_filename = input("Please input a file name of the format sales-YYYYMM.csv:")
 
-csv_filepath = os.path.join(os.path.dirname(__file__), "data", csv_filename)
 
-rows =[]
+csv_filepath = os.path.join(os.path.dirname(__file__), "data", csv_filename)   
+#adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/d42b75d4f536ebeca5d6b1934926cdd95aeea714/notes/python/modules/os.md
+
+exists = os.path.exists(csv_filepath)
+
+if exists == False:
+    print("File does not exist")
+    quit()
+
+
+
+rows = []
 
 with open(csv_filepath, "r") as csv_file:
     reader = csv.DictReader(csv_file)
@@ -46,8 +57,6 @@ top_products = sorted_product_sales[0:3]
     #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution_further.py
 
 
-
-
 print("-----------------------")
 print("MONTH: March 2018")
 
@@ -75,9 +84,11 @@ for product in top_products:
 fig, ax = plt.subplots()
 
 ax.get_xaxis().set_major_formatter(plt.FuncFormatter(lambda x, loc: "${0:,.2f}".format(int(x))))
+#adapted from https://preinventedwheel.com/matplotlib-thousands-separator-1-step-guide/
 
 plt.barh(name_axis, sales_axis)
 plt.ylabel('Product')
 plt.xlabel('Sales')
+plt.title('Top Selling Products')
 plt.show()
 #adapted from dataviz-matplotlib slack channel
