@@ -9,15 +9,23 @@ csv_filename = input("Please input a file name of the format sales-YYYYMM.csv:")
 
 csv_filepath = os.path.join(os.path.dirname(__file__), "data", csv_filename)
 
-product_sales =[]
+rows =[]
 
 with open(csv_filepath, "r") as csv_file:
     reader = csv.DictReader(csv_file)
-    for row in reader:
-        d = {"date": ["date"], "product": row["product"], "unit price": row["unit price"], "units sold": row["units sold"], "sales price": float(row["sales price"])}
-        product_sales.append(d)
+    for od in reader:
+        rows.append(dict(od))
+        # adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution.py
 
+sales_prices = []
 
+for row in rows:
+    sales_prices.append(float(row["sales price"]))
+
+total_sales = sum(sales_prices)
+usd = "${0:,.2f}"
+
+print(usd.format(total_sales))
 
 print("-----------------------")
 print("MONTH: March 2018")
