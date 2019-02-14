@@ -4,6 +4,8 @@
 
 import csv
 import os
+import itertools
+from operator import itemgetter
 
 csv_filename = input("Please input a file name of the format sales-YYYYMM.csv:")
 
@@ -24,6 +26,20 @@ for row in rows:
 
 total_sales = sum(sales_prices)
 usd = "${0:,.2f}"
+
+product_sales = []
+
+sorted_rows = sorted(rows, key=itemgetter("product"))
+sort_by_product = itertools.groupby(sorted_rows, key=itemgetter("product"))
+    #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/e2d64e2d74621f3ff070175954878ba3f1562388/notes/python/modules/itertools.md
+
+for product, rows in sort_by_product:
+    sales = sum((float(row["sales price"]) for row in rows))
+    product_sales.append({"name": product, "sales": sales})
+    #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution_further.py
+
+print(product_sales)
+
 
 print(usd.format(total_sales))
 
