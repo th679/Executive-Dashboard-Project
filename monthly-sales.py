@@ -38,8 +38,13 @@ for product, rows in sort_by_product:
     product_sales.append({"name": product, "sales": sales})
     #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution_further.py
 
-print(product_sales)
+sorted_product_sales = sorted(product_sales, key=itemgetter("sales"), reverse=True)
+top_products = sorted_product_sales[0:3]
 
+print(top_products)
+
+for product in top_products:
+    print(product["name"] + " " + usd.format(float(product["sales"])))
 
 print(usd.format(total_sales))
 
