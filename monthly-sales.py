@@ -6,6 +6,8 @@ import csv
 import os
 import itertools
 from operator import itemgetter
+import matplotlib.pyplot as plt
+
 
 csv_filename = input("Please input a file name of the format sales-YYYYMM.csv:")
 
@@ -40,13 +42,10 @@ for product, rows in sort_by_product:
 
 sorted_product_sales = sorted(product_sales, key=itemgetter("sales"), reverse=True)
 top_products = sorted_product_sales[0:3]
+    #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution_further.py
 
-print(top_products)
 
-for product in top_products:
-    print(product["name"] + " " + usd.format(float(product["sales"])))
 
-print(usd.format(total_sales))
 
 print("-----------------------")
 print("MONTH: March 2018")
@@ -55,13 +54,26 @@ print("-----------------------")
 print("CRUNCHING THE DATA...")
 
 print("-----------------------")
-print("TOTAL MONTHLY SALES: $12,000.71")
+print("TOTAL MONTHLY SALES: " + usd.format(total_sales))
 
 print("-----------------------")
 print("TOP SELLING PRODUCTS:")
-print("  1) Button-Down Shirt: $6,960.35")
-print("  2) Super Soft Hoodie: $1,875.00")
-print("  3) etc.")
+for product in top_products:
+    print(product["name"] + " " + usd.format(float(product["sales"])))
 
 print("-----------------------")
 print("VISUALIZING THE DATA...")
+
+name_axis = []
+sales_axis = []
+
+for product in top_products:
+    name_axis.append(product["name"])
+    sales_axis.append(float(product["sales"]))
+
+
+plt.bar(name_axis, sales_axis)
+plt.ylabel('Sales')
+plt.xlabel('Product')
+plt.show()
+#adapted from dataviz-matplotlib slack channel
