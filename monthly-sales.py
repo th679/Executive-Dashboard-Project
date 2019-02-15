@@ -97,7 +97,7 @@ ax.get_xaxis().set_major_formatter(plt.FuncFormatter(lambda x, loc: "${0:,.2f}".
 
 plt.barh(name_axis, sales_axis)
 plt.ylabel('Product')
-plt.xlabel('Sales')
+plt.xlabel('Sales (USD)')
 plt.title('Top Selling Products: ' + month_year)
 plt.tight_layout()
 plt.show()
