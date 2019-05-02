@@ -12,6 +12,18 @@ import datetime
 def to_usd(price):
     return "${0:,.2f}".format(price)
 
+def get_top_products(data):
+    product_sales = []
+    sorted_rows = sorted(data, key=itemgetter("product"))
+    sort_by_product = itertools.groupby(sorted_rows, key=itemgetter("product"))
+        #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/e2d64e2d74621f3ff070175954878ba3f1562388/notes/python/modules/itertools.md
+    for product, data in sort_by_product:
+        sales = sum((float(row["sales price"]) for row in data))
+        product_sales.append({"name": product, "sales": sales})
+        #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution_further.py
+    sorted_sales = sorted(product_sales, key=itemgetter("sales"), reverse=True)
+    top_products = sorted_sales[0:3]
+    return top_products
 
 csv_filename = input("Please input a file name of the format sales-YYYYMM.csv:")
 
@@ -42,21 +54,7 @@ for row in rows:
 
 total_sales = sum(sales_prices)
 
-
-product_sales = []
-
-sorted_rows = sorted(rows, key=itemgetter("product"))
-sort_by_product = itertools.groupby(sorted_rows, key=itemgetter("product"))
-    #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/e2d64e2d74621f3ff070175954878ba3f1562388/notes/python/modules/itertools.md
-
-for product, rows in sort_by_product:
-    sales = sum((float(row["sales price"]) for row in rows))
-    product_sales.append({"name": product, "sales": sales})
-    #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution_further.py
-
-sorted_product_sales = sorted(product_sales, key=itemgetter("sales"), reverse=True)
-top_products = sorted_product_sales[0:3]
-    #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution_further.py
+top_products = get_top_products(rows)
 
 
 def period(month):
@@ -89,7 +87,9 @@ print("VISUALIZING THE DATA...")
 name_axis = []
 sales_axis = []
 
-for product in top_products:
+sorted_top = sorted(top_products, key=itemgetter("sales"), reverse=False)
+
+for product in sorted_top:
     name_axis.append(product["name"])
     sales_axis.append(float(product["sales"]))
 
