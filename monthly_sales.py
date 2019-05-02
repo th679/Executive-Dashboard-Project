@@ -9,6 +9,10 @@ import matplotlib.ticker as ticker
 import datetime
 
 
+def to_usd(price):
+    return "${0:,.2f}".format(price)
+
+
 csv_filename = input("Please input a file name of the format sales-YYYYMM.csv:")
 
 csv_filepath = os.path.join(os.path.dirname(__file__), "data", csv_filename)   
@@ -37,7 +41,6 @@ for row in rows:
     sales_prices.append(float(row["sales price"]))
 
 total_sales = sum(sales_prices)
-usd = "${0:,.2f}"
 
 
 product_sales = []
@@ -72,12 +75,12 @@ print("-----------------------")
 print("CRUNCHING THE DATA...")
 
 print("-----------------------")
-print("TOTAL MONTHLY SALES: " + usd.format(total_sales))
+print("TOTAL MONTHLY SALES: " + to_usd(total_sales))
 
 print("-----------------------")
 print("TOP SELLING PRODUCTS:")
 for product in top_products:
-    print(product["name"] + " " + usd.format(float(product["sales"])))
+    print(product["name"] + " " + to_usd(float(product["sales"])))
 
 print("-----------------------")
 print("VISUALIZING THE DATA...")
@@ -92,7 +95,7 @@ for product in top_products:
 
 fig, ax = plt.subplots()
 
-ax.get_xaxis().set_major_formatter(plt.FuncFormatter(lambda x, loc: "${0:,.2f}".format(int(x))))
+ax.get_xaxis().set_major_formatter(plt.FuncFormatter(lambda x, loc: to_usd(int(x))))
 #adapted from https://preinventedwheel.com/matplotlib-thousands-separator-1-step-guide/
 
 plt.barh(name_axis, sales_axis)
