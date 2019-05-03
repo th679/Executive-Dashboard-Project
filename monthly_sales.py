@@ -25,83 +25,86 @@ def get_top_products(data):
     top_products = sorted_sales[0:3]
     return top_products
 
-csv_filename = input("Please input a file name of the format sales-YYYYMM.csv:")
 
-csv_filepath = os.path.join(os.path.dirname(__file__), "data", csv_filename)   
-#adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/d42b75d4f536ebeca5d6b1934926cdd95aeea714/notes/python/modules/os.md
+if __name__ == "__main__":
 
-exists = os.path.exists(csv_filepath)
-#adapted from https://dbader.org/blog/python-check-if-file-exists
+    csv_filename = input("Please input a file name of the format sales-YYYYMM.csv:")
 
-if exists == False:
-    print("File does not exist")
-    quit()
+    csv_filepath = os.path.join(os.path.dirname(__file__), "data", csv_filename)   
+    #adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/d42b75d4f536ebeca5d6b1934926cdd95aeea714/notes/python/modules/os.md
 
+    exists = os.path.exists(csv_filepath)
+    #adapted from https://dbader.org/blog/python-check-if-file-exists
 
-rows = []
-
-with open(csv_filepath, "r") as csv_file:
-    reader = csv.DictReader(csv_file)
-    for od in reader:
-        rows.append(dict(od))
-        # adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution.py
+    if exists == False:
+        print("File does not exist")
+        quit()
 
 
-sales_prices = []
+    rows = []
 
-for row in rows:
-    sales_prices.append(float(row["sales price"]))
-
-total_sales = sum(sales_prices)
-
-top_products = get_top_products(rows)
-
-
-def period(month):
-	months={'01':'January','02':'February','03':'March','04':'April',
-	'05':'May','06':'June','07':'July','08':'August','09':'September','10':'October',
-	'11':'November', '12':'December'}
-	return months[month]
-#adapted from https://github.com/hiepnguyen034/data_dashboard/blob/master/exec_dash.py
-
-month_year = period(csv_filename[10:12])+' '+ str(csv_filename[6:10])
+    with open(csv_filepath, "r") as csv_file:
+        reader = csv.DictReader(csv_file)
+        for od in reader:
+            rows.append(dict(od))
+            # adapted from https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution.py
 
 
-print("-----------------------")
-print("MONTH: "+ month_year)
-print("-----------------------")
-print("CRUNCHING THE DATA...")
+    sales_prices = []
 
-print("-----------------------")
-print("TOTAL MONTHLY SALES: " + to_usd(total_sales))
+    for row in rows:
+        sales_prices.append(float(row["sales price"]))
 
-print("-----------------------")
-print("TOP SELLING PRODUCTS:")
-for product in top_products:
-    print(product["name"] + " " + to_usd(float(product["sales"])))
+    total_sales = sum(sales_prices)
 
-print("-----------------------")
-print("VISUALIZING THE DATA...")
+    top_products = get_top_products(rows)
 
 
-name_axis = []
-sales_axis = []
+    def period(month):
+        months={'01':'January','02':'February','03':'March','04':'April',
+        '05':'May','06':'June','07':'July','08':'August','09':'September','10':'October',
+        '11':'November', '12':'December'}
+        return months[month]
+    #adapted from https://github.com/hiepnguyen034/data_dashboard/blob/master/exec_dash.py
 
-sorted_top = sorted(top_products, key=itemgetter("sales"), reverse=False)
+    month_year = period(csv_filename[10:12])+' '+ str(csv_filename[6:10])
 
-for product in sorted_top:
-    name_axis.append(product["name"])
-    sales_axis.append(float(product["sales"]))
 
-fig, ax = plt.subplots()
+    print("-----------------------")
+    print("MONTH: "+ month_year)
+    print("-----------------------")
+    print("CRUNCHING THE DATA...")
 
-ax.get_xaxis().set_major_formatter(plt.FuncFormatter(lambda x, loc: to_usd(int(x))))
-#adapted from https://preinventedwheel.com/matplotlib-thousands-separator-1-step-guide/
+    print("-----------------------")
+    print("TOTAL MONTHLY SALES: " + to_usd(total_sales))
 
-plt.barh(name_axis, sales_axis)
-plt.ylabel('Product')
-plt.xlabel('Sales (USD)')
-plt.title('Top Selling Products: ' + month_year)
-plt.tight_layout()
-plt.show()
-#adapted from dataviz-matplotlib slack channel
+    print("-----------------------")
+    print("TOP SELLING PRODUCTS:")
+    for product in top_products:
+        print(product["name"] + " " + to_usd(float(product["sales"])))
+
+    print("-----------------------")
+    print("VISUALIZING THE DATA...")
+
+
+    name_axis = []
+    sales_axis = []
+
+    sorted_top = sorted(top_products, key=itemgetter("sales"), reverse=False)
+
+    for product in sorted_top:
+        name_axis.append(product["name"])
+        sales_axis.append(float(product["sales"]))
+
+    fig, ax = plt.subplots()
+
+    ax.get_xaxis().set_major_formatter(plt.FuncFormatter(lambda x, loc: to_usd(int(x))))
+    #adapted from https://preinventedwheel.com/matplotlib-thousands-separator-1-step-guide/
+
+    plt.barh(name_axis, sales_axis)
+    plt.ylabel('Product')
+    plt.xlabel('Sales (USD)')
+    plt.title('Top Selling Products: ' + month_year)
+    plt.tight_layout()
+    plt.show()
+    #adapted from dataviz-matplotlib slack channel
